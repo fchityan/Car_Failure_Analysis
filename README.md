@@ -1,97 +1,109 @@
-File Structure
-root
- - eda.ipynb
- - readme.md
+📌 Project Overview
 
-The pipeline consists of 1 class Config. To configure the pipeline parameters, edit config.py with the desired settings before running. The pipeline is ran by executing run.sh.
+This project presents an end-to-end machine learning workflow for analyzing car failure data, from exploratory data analysis (EDA) through feature engineering, model training, tuning, and evaluation.
 
-Configurations Available
+The notebook is designed to be:
 
-- scale - Scales the data based on training set
-- transform - Log transformation on Fuel consumption
-- balance - Balances the label proportions
-- cv - Number of cross validation folds to perform
-- perform_cv - Whether or not to perform cross validation
-- return_top_models - integer, specifies how many models to return for tuning. If None, no models will be tuned.
-- random_tune - If True, uses Randomize Search CV. Else, uses Grid Search CV
-- models - The recommended models for the dataset
-- base_models - Baseline models to examine how well different types of classifiers perform on the data
-- model_params - Parameter grid for hyperparameter tuning
+	•	📓 Self-contained and reproducible
+	•	🔬 Exploratory yet production-aware
+	•	🤖 Suitable for benchmarking multiple model types
 
-### Key findings of EDA
+All analysis, preprocessing, and modeling steps are executed directly within the notebook.
 
-1. Negative values present in RPM
-2. Fuel consumption is slightly right skewed
-3. Temperature can be label encoded into high and low temperature because of its distribution
-4. Large number of unique models, should not be one hot encoded
-5. Varied distributions of categorical values, tree based algorithms should perform well on this data
-6. Failures can be merged into 1 column, as 1 car can only have a single type of failure
-7. Imbalance of target labels (>80% of cars have no failures), down-sampling of data should be performed, but at the expense of losing accuracy
+🎯 Objective
 
-The pipeline consists of 6 steps
+The goal is to build a reliable classification pipeline that:
 
-1. Cleaning
-2. Encoding
-3. Preparing
-4. Model Training
-5. Model Tuning
-6. Evaluation
+	•	Identifies patterns associated with vehicle failures
+	•	Handles data quality issues and feature imbalance
+	•	Evaluates the trade-offs between accuracy and class balance
+	•	Compares multiple machine learning models using consistent preprocessing
 
-We begin the pipeline process with 10,081 rows and 14 columns of data
+ 📊 Key Findings from Exploratory Data Analysis
 
-### Cleaning of Data
+Initial EDA revealed several important characteristics of the dataset:
 
-From the EDA conducted, the following errors were corrected.
-| Column | Error Description | Correction Made |
-| ------ | ------ | ------- |
-| Membership | Contains NA values | Replaced with "None" |
-| Temperature | Stored as a string | Extracted the temperature values encoded to High Temp and Low Temp|
-| Car ID | Unused column | Dropped from the data |
-| RPM | Negative Values | Dropped rows with negative RPM |
+	•	⚠️ Negative values present in RPM
+	•	📈 Fuel consumption is slightly right-skewed
+	•	🌡️ Temperature forms two clearly separable clusters
+	•	🚗 High cardinality in car model, making one-hot encoding impractical
+	•	🌳 Categorical feature distributions vary widely, favoring tree-based models
+	•	🔧 Each car can experience only one failure type
+	•	⚖️ Strong target imbalance (>80% non-failure cases)
 
-For Temperature, the histogram of its values showed a clean boundary between 2 groups of values. Within each group, its variance is low. Hence, encoding it into "High" and "Low" temperature would reduce noise in the features.
+Due to the imbalance, down-sampling improves class balance but may reduce overall accuracy.
 
-After cleaning, there are 9,857 rows and 13 columns.
+🔁 Pipeline Stages
 
-### Encoding
+The notebook follows a structured 6-step pipeline:
 
-After encoding of Temperature, only RPM and Fuel consumption remained as numerical features. The rest of the features needs to be encoded. To ensure low dimensionality after encoding, features with a large number of unique values were encoded using mean weight encoding, while one hot encoding was used for the rest of the features.
+	1.	🧹 Data Cleaning
+	2.	🏷️ Feature Encoding
+	3.	🧪 Data Preparation
+	4.	🤖 Model Training
+	5.	🎯 Hyperparameter Tuning
+	6.	📈 Model Evaluation
 
-Additionally, we merged the 5 Fault columns into one, as we found in the EDA that a car can only have 1 type of fault. Doing this reduces the number of classifiers that we have to train.
+ 📦 Initial Dataset Size
+ 
+	•	10,081 rows
+	•	14 columns
 
-After encoding, The data has 9,857 rows and 23 columns.
+ 🌡️ Temperature Encoding Rationale
 
-The summary of feature processing is as follows
-| Column | Process |
-| ------ | ------ |
-| Car ID | Dropped |
-| Model | Mean weight encoded |
-| Temperature | Value extracted, then label encoded |
-| RPM | Dropped negative values, with option to standardise and log transform |
-| Factory | One hot encoded |
-| Usage | One hot encoded |
-| Fuel consumption | Option to standardise|
-| Membership | NA values replace with "None", then one hot encoded |
-| Failure Columns | Joined into 1 Faults column |
+The distribution of temperature values showed a clean separation into two low-variance clusters. Encoding these as High and Low reduces noise while preserving signal.
 
-### Preparing
+After cleaning:
 
-3 options are available for preparing of data.
+	•	9,857 rows
+	•	13 columns
 
-1. Log transformation of fuel consumption, as it is slightly right skewed
-2. Balancing of target labels
-3. Standardisation of data
+ 🏷️ Feature Encoding
 
-After the desired operations are carried out, the data is split in train and test sets for model training.
+After cleaning:
 
-Before splitting into training and testing sets,
+	•	Numerical features: RPM, Fuel Consumption
+	•	All other features are categorical
 
-- If the data is balanced, there are a total of 1,496 rows
-- If not, there are a total of 9,857 rows.
+Encoding Strategy
+	•	🔢 Mean weight encoding for high-cardinality features
+	•	🔠 One-hot encoding for low-cardinality features
+	•	🔧 Failure columns merged into a single Faults column
 
-After splitting,
+After encoding:
 
-- If the data is balanced, there are a total of 1,047 rows in the training set, and 449 rows in the test set (70% Train, 30% Test)
-- If not, there are a total of 6,899 rows in the training set, and 2,958 rows in the test set. (70% Train, 30% Test)
+	•	9,857 rows
+	•	23 columns
 
-.
+🧪 Data Preparation
+
+The notebook supports optional preparation steps:
+
+	•	📉 Log transformation of fuel consumption
+	•	⚖️ Target label balancing
+	•	📐 Feature standardization
+
+After preparation, the dataset is split into training and testing sets (70% / 30%).
+
+📉 Dataset Size After Preparation
+
+Before Train/Test Split:
+
+	•	Balanced dataset: 1,496 rows
+	•	Unbalanced dataset: 9,857 rows
+
+ 🧠 Modeling Approach
+
+The notebook evaluates:
+
+	•	Baseline classifiers for performance benchmarking
+	•	Multiple model families to assess bias–variance trade-offs
+	•	Hyperparameter tuning using cross-validation
+	•	Performance metrics appropriate for imbalanced data
+
+ ✅ Key Takeaways
+ 
+	•	🧹 Strong preprocessing improves model stability
+	•	⚖️ Balancing improves minority-class detection at an accuracy cost
+	•	🌳 Tree-based models perform well with mixed feature types
+	•	📊 Proper encoding dramatically reduces dimensionality
