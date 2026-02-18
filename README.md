@@ -8,7 +8,6 @@ The notebook is designed to be:
 	• Data Cleaning and Preprocessing
 	• Feature Transformation and Encoding
 	• Handling Class Imbalance
-	• Training and Evaluating a Classification Model
 
 The primary goal is to understand the dataset's structure and investigate how preprocessing decisions influence classification performance. 
 
@@ -22,7 +21,6 @@ Specifically, the analysis aims to:
 	• Address data quality issues
 	• Design appripriate encoding strategies for categorical features
 	• Handle significant class imbalance
-	• Evaluate model performance using relevant classification metrics
 
  📊 Dataset Overview
 
