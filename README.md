@@ -1,27 +1,32 @@
 📌 Project Overview
 
-This project presents an end-to-end machine learning workflow for analyzing car failure data, from exploratory data analysis (EDA) through feature engineering, model training, tuning, and evaluation.
+This project analyzes a vehicle operational dataset to explore factors associated with car failures.
 
 The notebook is designed to be:
 
-	•	📓 Self-contained and reproducible
-	•	🔬 Exploratory yet production-aware
-	•	🤖 Suitable for benchmarking multiple model types
+	• Exploratory Data Analysis (EDA)
+	• Data Cleaning and Preprocessing
+	• Feature Transformation and Encoding
+	• Handling Class Imbalance
+	• Training and Evaluating a Classification Model
 
-All analysis, preprocessing, and modeling steps are executed directly within the notebook.
+The primary goal is to understand the dataset's structure and investigate how preprocessing decisions influence classification performance. 
 
 🎯 Objective
 
-The goal is to build a reliable classification pipeline that:
+The objective of this project is to develop a classification model capable of predicting vehicle failure events based on operational features:
 
-	•	Identifies patterns associated with vehicle failures
-	•	Handles data quality issues and feature imbalance
-	•	Evaluates the trade-offs between accuracy and class balance
-	•	Compares multiple machine learning models using consistent preprocessing
+Specifically, the analysis aims to:
 
- 📊 Key Findings from Exploratory Data Analysis
+	• Identify patterns in vehicle operational metrics
+	• Address data quality issues
+	• Design appripriate encoding strategies for categorical features
+	• Handle significant class imbalance
+	• Evaluate model performance using relevant classification metrics
 
-Initial EDA revealed several important characteristics of the dataset:
+ 📊 Dataset Overview
+
+Key characteristics identified during EDA:
 
 	•	⚠️ Negative values present in RPM
 	•	📈 Fuel consumption is slightly right-skewed
@@ -31,18 +36,31 @@ Initial EDA revealed several important characteristics of the dataset:
 	•	🔧 Each car can experience only one failure type
 	•	⚖️ Strong target imbalance (>80% non-failure cases)
 
-Due to the imbalance, down-sampling improves class balance but may reduce overall accuracy.
 
-🔁 Pipeline Stages
+🔁 Exploratory Data Analysis (EDA)
 
-The notebook follows a structured 6-step pipeline:
+The exploratory phase focused on:
 
-	1.	🧹 Data Cleaning
-	2.	🏷️ Feature Encoding
-	3.	🧪 Data Preparation
-	4.	🤖 Model Training
-	5.	🎯 Hyperparameter Tuning
-	6.	📈 Model Evaluation
+Numerical Features:
+
+	• Distribution analysis
+	• Detection of invalid values
+	• Identification of skewness and clustering
+
+Categorical Features:
+
+	• Cardinality assessment
+	• Category distribution analysis
+	• Encoding suitability evaluation
+
+Target Distribution:
+
+The dataset presents a highly imbalanced classificatin problem:
+
+	• Majority: Non-failure
+	• Minority: Failure
+
+This imbalance significantly influences model evaluation and interpretation.
 
  📦 Initial Dataset Size
  
@@ -75,16 +93,6 @@ After encoding:
 	•	9,857 rows
 	•	23 columns
 
-🧪 Data Preparation
-
-The notebook supports optional preparation steps:
-
-	•	📉 Log transformation of fuel consumption
-	•	⚖️ Target label balancing
-	•	📐 Feature standardization
-
-After preparation, the dataset is split into training and testing sets (70% / 30%).
-
 📉 Dataset Size After Preparation
 
 Before Train/Test Split:
@@ -92,18 +100,9 @@ Before Train/Test Split:
 	•	Balanced dataset: 1,496 rows
 	•	Unbalanced dataset: 9,857 rows
 
- 🧠 Modeling Approach
-
-The notebook evaluates:
-
-	•	Baseline classifiers for performance benchmarking
-	•	Multiple model families to assess bias–variance trade-offs
-	•	Hyperparameter tuning using cross-validation
-	•	Performance metrics appropriate for imbalanced data
-
  ✅ Key Takeaways
  
-	•	🧹 Strong preprocessing improves model stability
-	•	⚖️ Balancing improves minority-class detection at an accuracy cost
-	•	🌳 Tree-based models perform well with mixed feature types
-	•	📊 Proper encoding dramatically reduces dimensionality
+	•	Data cleaning significantly improves model reliability
+	•	Encoding strategy affects dimensionality and predictive performance
+	•	Class imbalance has a strong impact on evaluation metrics
+	•	Balancing improves minority class detection but may reduce overall accuracy
