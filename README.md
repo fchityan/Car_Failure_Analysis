@@ -1,5 +1,20 @@
 # Car Failure Analysis
 
+<!-- portfolio-summary:start -->
+## Portfolio Snapshot
+
+**Problem:** Missing and non-physical fleet data make vehicle failure risk difficult to interpret reliably.
+
+**Method:** Used DuckDB SQL, Python, and pandas to clean/impute operating fields, engineer a Fail/Pass target and interpretable risk bands, and compare failure rates across vehicle and operating segments.
+
+**Output:** A cleaned ML-ready dataset and preventive-maintenance insights across model, factory, usage, membership, and operating-condition segments.
+
+**Scope boundary:** This portfolio project is an analytics/EDA project; **no trained classifier is claimed**.
+
+**Portfolio stack:** SQL · DuckDB · Python · pandas
+
+<!-- portfolio-summary:end -->
+
 Business-focused exploratory analysis of vehicle failure risk, designed to support preventive maintenance decisions and prepare a machine-learning-ready classification target.
 
 ## Executive Summary
