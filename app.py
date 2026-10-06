@@ -32,6 +32,7 @@ class PredictionResponse(BaseModel):
     threshold: float
     model_name: str
     model_version: str
+    request_id: str
 
 
 @asynccontextmanager
