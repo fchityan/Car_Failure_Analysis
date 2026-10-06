@@ -1,95 +1,168 @@
-# Car Failure Analysis
+# Vehicle Failure Risk — Production ML
 
-<!-- portfolio-summary:start -->
+A production-oriented predictive-maintenance classification project built from the original Car Failure exploratory analysis.
+
+The original notebook, `car_failure_analysis.ipynb`, is preserved as the analytical foundation. The repository now adds a reproducible training pipeline, validation-only threshold optimization, versioned model artifact, typed FastAPI scoring service, container deployment, schema validation, and unit tests.
+
 ## Portfolio Snapshot
 
-**Problem:** Missing and non-physical fleet data make vehicle failure risk difficult to interpret reliably.
+**Problem:** Fleet failure risk is difficult to operationalize when telemetry contains missing or non-physical values and failure is represented across several component indicators.
 
-**Method:** Used DuckDB SQL, Python, and pandas to clean/impute operating fields, engineer a Fail/Pass target and interpretable risk bands, and compare failure rates across vehicle and operating segments.
+**Method:** Normalize the source schema, derive one Fail/Pass target from Failure A-E, preprocess mixed numerical/categorical features, compare three classifiers, tune the operating threshold on validation data with recall-weighted F2, and lock evaluation to an untouched test split.
 
-**Output:** A cleaned ML-ready dataset and preventive-maintenance insights across model, factory, usage, membership, and operating-condition segments.
+**Production output:** A serialized preprocessing + model bundle, model/version metadata, threshold-aware online scoring API, liveness/readiness checks, Docker deployment, reproducible metrics, and automated unit tests.
 
-**Scope boundary:** This portfolio project is an analytics/EDA project; **no trained classifier is claimed**.
+**Stack:** Python · pandas · scikit-learn · FastAPI · Docker · DuckDB
 
-**Portfolio stack:** SQL · DuckDB · Python · pandas
+## Why this is now production work
 
-<!-- portfolio-summary:end -->
+The earlier version intentionally stopped at EDA and target design. The upgraded repository separates exploration from serving and adds the controls needed to move a model through a repeatable lifecycle:
 
-Business-focused exploratory analysis of vehicle failure risk, designed to support preventive maintenance decisions and prepare a machine-learning-ready classification target.
+- one training/serving feature contract
+- stratified 60/20/20 train/validation/test split
+- Logistic Regression, Random Forest, and Gradient Boosting comparison
+- ROC-AUC and average-precision ranking metrics
+- precision, recall, F1 and recall-weighted F2 operating metrics
+- validation-only decision-threshold tuning
+- model artifact containing preprocessing, classifier, threshold, features, version and creation time
+- FastAPI service that loads the model once and supports bounded batch inference
+- `/live`, `/ready`, and `/metadata` operational endpoints
+- container execution as a non-root user
+- tests for target construction and threshold behavior
 
-## Executive Summary
+## Source schema
 
-Unexpected vehicle failures increase downtime, maintenance cost, and operational disruption. This project translates raw fleet-style data into decision-ready insights and a clear Fail or Pass target for downstream predictive modeling.
+The training pipeline expects the fields used by the original notebook:
 
-## Business Objective
+- `Car ID`
+- `Model`
+- `Color`
+- `Temperature`
+- `RPM`
+- `Factory`
+- `Usage`
+- `Fuel consumption`
+- `Membership`
+- `Failure A` through `Failure E`
 
-Identify which vehicle segments and operating conditions are most associated with failure so maintenance teams can intervene earlier and allocate resources more effectively.
+The target is defined as failure when **any** Failure A-E flag equals `1`. Identifier and component-failure columns are excluded from model inputs so they cannot leak the target.
 
-## Competencies Demonstrated
+## Model features
 
-- SQL-first analytics using DuckDB in Python.
-- Data quality diagnosis and practical imputation strategy.
-- Feature engineering for interpretability and stakeholder communication.
-- Translation of technical analysis into business-facing recommendations.
+The service scores these fields:
 
-## Technical Scope
+```text
+model
+color
+temperature
+rpm
+factory
+usage
+fuel_consumption
+membership
+```
 
-- Ingest Failure.csv into DuckDB as the analytical working table.
-- Audit null and non-physical values in key fields.
-- Standardize schema and column naming for maintainable SQL workflows.
-- Impute invalid RPM, temperature, and fuel consumption using model-level medians.
-- Recode missing membership values to No Membership.
-- Engineer binary target label.
-- Engineer interpretable risk-band features.
-- Quantify failure patterns by model, factory, usage, membership, and operating conditions.
+Numerical values are median-imputed and standardized. Categorical fields are most-frequent-imputed and one-hot encoded with unknown-category handling.
 
-## Target Definition
+## Train
 
-- Fail: at least one of failure_a, failure_b, failure_c, failure_d, failure_e equals 1.
-- Pass: all failure indicators equal 0.
+The source dataset is intentionally not committed. Place `Failure.csv` locally and run:
 
-## Key Findings
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python -m src.train --data Failure.csv
+```
 
-- Class distribution is suitable for binary modeling, with Fail at 35.85% and Pass at 64.15%.
-- SUV is the highest-risk model segment with a 38.24% failure rate.
-- Factory B shows the highest factory-level failure rate at 38.15%.
-- Very high usage has the strongest association with failure at 71.36%.
-- High fuel-consumption vehicles show elevated failure rates at 42.28%.
+Generated artifacts include:
 
-## Business Implications
+```text
+artifacts/model_bundle.joblib
+outputs/training_summary.json
+outputs/validation_model_comparison.csv
+outputs/threshold_tuning.csv
+outputs/test_predictions.csv
+```
 
-- Prioritize preventive checks for high-usage and high fuel-consumption vehicles.
-- Use model and factory risk segmentation to support maintenance planning.
-- Incorporate engineered risk bands into predictive maintenance scoring.
+The test split is used only after model and threshold selection are complete.
 
-## Limitations
+## Serve
 
-- Analysis is observational and does not establish causality.
-- Feature interactions and confounding factors are not yet modeled.
-- Some subgroup-level percentages may be unstable due to small sample sizes.
-- Current scope ends at EDA and target design, without trained models.
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8000
+```
 
-## Recommended Next Steps
+Operational endpoints:
 
-- Train baseline classifiers on the engineered target.
-- Evaluate with ROC-AUC, precision, recall, F1, and confusion matrix.
-- Add cross-validation and threshold tuning for decision quality.
-- Perform explainability analysis to support stakeholder trust.
-- Refactor notebook logic into reusable, testable pipelines.
+```text
+GET  /live
+GET  /ready
+GET  /metadata
+POST /predict
+```
 
-## Tech Stack
+Example request:
 
-- Python
-- DuckDB
-- pandas
-- SQL
+```json
+[
+  {
+    "model": "SUV",
+    "color": "Blue",
+    "temperature": 88.0,
+    "rpm": 4200,
+    "factory": "Factory B",
+    "usage": "Very High",
+    "fuel_consumption": 10.2,
+    "membership": "Gold"
+  }
+]
+```
 
-## Repository Contents
+The response returns failure probability, binary decision, operating threshold, model name, and model version.
 
-- car_failure_analysis.ipynb
-- README.md
+`MAX_BATCH_SIZE` defaults to 100 and can be overridden with an environment variable. `MODEL_PATH` can point the service to a promoted model bundle.
 
+## Docker
 
-## Project Summary
+```bash
+docker build -t vehicle-failure-api .
+docker run --rm -p 8000:8000 -v "$PWD/artifacts:/app/artifacts:ro" vehicle-failure-api
+```
 
-This project demonstrates end-to-end analytical ownership: defining a business problem, cleaning imperfect data, engineering interpretable features, quantifying risk patterns, and outlining a practical path to production-ready predictive modeling.
+The image runs as a non-root application user. The container remains live if a model artifact is missing, while `/ready` returns `503`; this separates process health from model readiness.
+
+## Tests
+
+```bash
+pytest -q
+```
+
+## Original analytical findings
+
+The notebook reported useful EDA signals including higher observed failure rates for very-high-usage vehicles and elevated failure rates in high fuel-consumption segments. Those findings remain exploratory associations, not causal conclusions.
+
+## Production boundary
+
+No new predictive-performance number is claimed in this README because `Failure.csv` is not committed and the upgraded training pipeline has not been rerun here against the source dataset. After training, use `outputs/training_summary.json` as the source of truth for locked test metrics rather than copying notebook-era percentages into model-performance claims.
+
+## Repository structure
+
+```text
+.
+├── app.py
+├── car_failure_analysis.ipynb
+├── Dockerfile
+├── requirements.txt
+├── src/
+│   ├── __init__.py
+│   ├── inference.py
+│   ├── pipeline.py
+│   └── train.py
+└── tests/
+    └── test_pipeline.py
+```
+
+## Next production steps
+
+Infrastructure outside this repository would still be needed for authentication/authorization, centralized logs and metrics, a managed model registry, scheduled retraining, alert routing, data contracts, canary rollout, rollback automation, and real fleet feedback loops.

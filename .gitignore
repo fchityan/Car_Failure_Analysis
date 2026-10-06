@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+Failure.csv
+failure.db
+artifacts/*.joblib
+outputs/*.csv
+outputs/*.json
