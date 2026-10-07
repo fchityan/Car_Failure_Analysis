@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -85,6 +86,24 @@ def main() -> None:
     model_path = artifacts_dir / "model_bundle.joblib"
     joblib.dump(bundle, model_path)
 
+    digest = hashlib.sha256()
+    with model_path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    model_sha256 = digest.hexdigest()
+
+    deployment_manifest = {
+        "model_name": best["name"],
+        "model_version": model_version,
+        "model_sha256": model_sha256,
+        "created_at_utc": created_at,
+        "threshold": float(best["threshold"]),
+        "stage": "candidate",
+        "promotion_note": "Set MODEL_SHA256 to this fingerprint when promoting this immutable artifact.",
+    }
+    with (outputs_dir / "deployment_manifest.json").open("w", encoding="utf-8") as handle:
+        json.dump(deployment_manifest, handle, indent=2)
+
     summary = {
         "model_name": best["name"],
         "model_version": model_version,
@@ -98,6 +117,8 @@ def main() -> None:
         },
         "test_metrics": test_metrics,
         "artifact": str(model_path),
+        "model_sha256": model_sha256,
+        "deployment_manifest": str(outputs_dir / "deployment_manifest.json"),
     }
     with (outputs_dir / "training_summary.json").open("w", encoding="utf-8") as handle:
         json.dump(summary, handle, indent=2)
