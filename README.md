@@ -163,6 +163,12 @@ No new predictive-performance number is claimed in this README because `Failure.
     └── test_pipeline.py
 ```
 
-## Next production steps
+## Production hardening layer
 
-Infrastructure outside this repository would still be needed for authentication/authorization, centralized logs and metrics, a managed model registry, scheduled retraining, alert routing, data contracts, canary rollout, rollback automation, and real fleet feedback loops.
+The service now adds API-key authentication, SHA-256 model verification, structured request logging, request IDs, Prometheus metrics, environment-controlled documentation, a deployment manifest for immutable model promotion, CI container builds, Kubernetes probes/autoscaling/disruption controls, and production runbook/security guidance.
+
+See `docs/production_runbook.md`, `deploy/kubernetes.yaml`, `.env.example`, and `SECURITY.md`.
+
+## Production boundary
+
+This is intentionally close to the **application and MLOps layer** of a real production service. It is not yet a live enterprise production system because there is no real fleet telemetry stream, cloud IAM/secret manager, centralized telemetry, managed registry, live alert routing, canary rollout, real outcome feedback, or operational on-call ownership.
