@@ -1,166 +1,41 @@
 # Vehicle Failure Risk
 
-A production-oriented predictive-maintenance classification project built from the original Car Failure exploratory analysis.
+## Project Overview
 
-The original notebook, `car_failure_analysis.ipynb`, is preserved as the analytical foundation. The repository now adds a reproducible training pipeline, validation-only threshold optimization, versioned model artifact, typed FastAPI scoring service, container deployment, schema validation, and unit tests.
+This predictive-maintenance project explores how vehicle attributes and operating conditions relate to equipment-failure risk. It builds on an exploratory car-failure notebook and defines a binary prediction task: whether **any of five component-failure flags** indicates a failure.
 
-## Portfolio Snapshot
+## Problem
 
-**Problem:** Fleet failure risk is difficult to operationalize when telemetry contains missing or non-physical values and failure is represented across several component indicators.
+Vehicle information can contain missing values, inconsistent categories, and extreme readings. A useful classification approach must handle these inputs while reducing the chance of overlooking potentially costly failures.
 
-**Method:** Normalize the source schema, derive one Fail/Pass target from Failure A-E, preprocess mixed numerical/categorical features, compare three classifiers, tune the operating threshold on validation data with recall-weighted F2, and lock evaluation to an untouched test split.
+## Approach
 
-**Production output:** A serialized preprocessing + model bundle, model/version metadata, threshold-aware online scoring API, liveness/readiness checks, Docker deployment, reproducible metrics, and automated unit tests.
+- Combine Failure A–E indicators into a single Fail/Pass target.
+- Exclude identifiers and failure flags from prediction features to prevent target leakage.
+- Prepare numerical and categorical information with repeatable preprocessing.
+- Compare Logistic Regression, Random Forest, and Gradient Boosting.
+- Use validation-set F2 to tune the decision threshold, then assess a held-out test set.
 
-**Stack:** Python · pandas · scikit-learn · FastAPI · Docker · DuckDB
+## Key Features
 
-## Why this is now production work
+- Reproducible vehicle-risk training and evaluation
+- Feature-based single and batch predictions through FastAPI
+- Input checks, versioned model outputs, and automated tests
+- Retained exploratory analysis for investigating possible risk factors
 
-The earlier version intentionally stopped at EDA and target design. The upgraded repository separates exploration from serving and adds the controls needed to move a model through a repeatable lifecycle:
+## Findings and Limitations
 
-- one training/serving feature contract
-- stratified 60/20/20 train/validation/test split
-- Logistic Regression, Random Forest, and Gradient Boosting comparison
-- ROC-AUC and average-precision ranking metrics
-- precision, recall, F1 and recall-weighted F2 operating metrics
-- validation-only decision-threshold tuning
-- model artifact containing preprocessing, classifier, threshold, features, version and creation time
-- FastAPI service that loads the model once and supports bounded batch inference
-- `/live`, `/ready`, and `/metadata` operational endpoints
-- container execution as a non-root user
-- tests for target construction and threshold behavior
+The exploratory notebook observed higher failure rates in very-high-usage vehicles and some high-fuel-consumption groups. **These are associations, not proof of causation.** No new predictive-performance score is claimed here because the original `Failure.csv` dataset is not committed and the updated training pipeline has not been rerun against it.
 
-## Source schema
+## Technology Stack
 
-The training pipeline expects the fields used by the original notebook:
+**Python · pandas · scikit-learn · FastAPI · Docker · DuckDB · pytest**
 
-- `Car ID`
-- `Model`
-- `Color`
-- `Temperature`
-- `RPM`
-- `Factory`
-- `Usage`
-- `Fuel consumption`
-- `Membership`
-- `Failure A` through `Failure E`
+## Explore the Project
 
-The target is defined as failure when **any** Failure A-E flag equals `1`. Identifier and component-failure columns are excluded from model inputs so they cannot leak the target.
+- [Original exploratory notebook](car_failure_analysis.ipynb)
+- [Technical guide — schema, evaluation, and run commands](docs/technical_guide.md)
+- [Deployment and operations notes](docs/production_runbook.md)
+- [Security guidance](SECURITY.md)
 
-## Model features
-
-The service scores these fields:
-
-```text
-model
-color
-temperature
-rpm
-factory
-usage
-fuel_consumption
-membership
-```
-
-Numerical values are median-imputed and standardized. Categorical fields are most-frequent-imputed and one-hot encoded with unknown-category handling.
-
-## Train
-
-The source dataset is intentionally not committed. Place `Failure.csv` locally and run:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python -m src.train --data Failure.csv
-```
-
-Generated artifacts include:
-
-```text
-artifacts/model_bundle.joblib
-outputs/training_summary.json
-outputs/validation_model_comparison.csv
-outputs/threshold_tuning.csv
-outputs/test_predictions.csv
-```
-
-The test split is used only after model and threshold selection are complete.
-
-## Serve
-
-```bash
-uvicorn app:app --host 0.0.0.0 --port 8000
-```
-
-Operational endpoints:
-
-```text
-GET  /live
-GET  /ready
-GET  /metadata
-POST /predict
-```
-
-Example request:
-
-```json
-[
-  {
-    "model": "SUV",
-    "color": "Blue",
-    "temperature": 88.0,
-    "rpm": 4200,
-    "factory": "Factory B",
-    "usage": "Very High",
-    "fuel_consumption": 10.2,
-    "membership": "Gold"
-  }
-]
-```
-
-The response returns failure probability, binary decision, operating threshold, model name, and model version.
-
-`MAX_BATCH_SIZE` defaults to 100 and can be overridden with an environment variable. `MODEL_PATH` can point the service to a promoted model bundle.
-
-## Docker
-
-```bash
-docker build -t vehicle-failure-api .
-docker run --rm -p 8000:8000 -v "$PWD/artifacts:/app/artifacts:ro" vehicle-failure-api
-```
-
-The image runs as a non-root application user. The container remains live if a model artifact is missing, while `/ready` returns `503`; this separates process health from model readiness.
-
-## Tests
-
-```bash
-pytest -q
-```
-
-## Original analytical findings
-
-The notebook reported useful EDA signals including higher observed failure rates for very-high-usage vehicles and elevated failure rates in high fuel-consumption segments. Those findings remain exploratory associations, not causal conclusions.
-
-## Repository structure
-
-```text
-.
-├── app.py
-├── car_failure_analysis.ipynb
-├── Dockerfile
-├── requirements.txt
-├── src/
-│   ├── __init__.py
-│   ├── inference.py
-│   ├── pipeline.py
-│   └── train.py
-└── tests/
-    └── test_pipeline.py
-```
-
-## Production hardening layer
-
-The service now adds API-key authentication, SHA-256 model verification, structured request logging, request IDs, Prometheus metrics, environment-controlled documentation, a deployment manifest for immutable model promotion, CI container builds, Kubernetes probes/autoscaling/disruption controls, and production runbook/security guidance.
-
-See `docs/production_runbook.md`, `deploy/kubernetes.yaml`, `.env.example`, and `SECURITY.md`.
+To reproduce training, provide the source `Failure.csv` and follow the technical guide.
