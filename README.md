@@ -142,10 +142,6 @@ pytest -q
 
 The notebook reported useful EDA signals including higher observed failure rates for very-high-usage vehicles and elevated failure rates in high fuel-consumption segments. Those findings remain exploratory associations, not causal conclusions.
 
-## Production boundary
-
-No new predictive-performance number is claimed in this README because `Failure.csv` is not committed and the upgraded training pipeline has not been rerun here against the source dataset. After training, use `outputs/training_summary.json` as the source of truth for locked test metrics rather than copying notebook-era percentages into model-performance claims.
-
 ## Repository structure
 
 ```text
@@ -168,7 +164,3 @@ No new predictive-performance number is claimed in this README because `Failure.
 The service now adds API-key authentication, SHA-256 model verification, structured request logging, request IDs, Prometheus metrics, environment-controlled documentation, a deployment manifest for immutable model promotion, CI container builds, Kubernetes probes/autoscaling/disruption controls, and production runbook/security guidance.
 
 See `docs/production_runbook.md`, `deploy/kubernetes.yaml`, `.env.example`, and `SECURITY.md`.
-
-## Production boundary
-
-This is intentionally close to the **application and MLOps layer** of a real production service. It is not yet a live enterprise production system because there is no real fleet telemetry stream, cloud IAM/secret manager, centralized telemetry, managed registry, live alert routing, canary rollout, real outcome feedback, or operational on-call ownership.
