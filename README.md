@@ -40,6 +40,7 @@ See the [requirements and solution-design assessment](docs/business-analysis/bus
 | Existing folder | Business or delivery perspective |
 |---|---|
 | `app.py` | API scoring and digital solution integration |
+| `data-discovery-and-insights/` | Fleet reliability indicators, exploratory diagnostics and failure-risk profiling |
 | `src/` | Vehicle-data transformation and predictive ML lifecycle |
 | `tests/` | Automated model and schema quality checks |
 | `deployment-architecture/` | Deployment architecture and operating readiness |
