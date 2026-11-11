@@ -29,7 +29,11 @@ The exploratory notebook observed higher failure rates in very-high-usage vehicl
 
 ## Technology Stack
 
-**Python · pandas · scikit-learn · FastAPI · Docker · DuckDB · pytest**
+- **Language and analysis:** Python, pandas, NumPy, DuckDB, Jupyter Notebook
+- **Machine learning:** scikit-learn (Logistic Regression, Random Forest, Gradient Boosting, preprocessing/evaluation), joblib
+- **API and validation:** FastAPI, Uvicorn, Pydantic, HTTPX
+- **Monitoring and deployment:** Prometheus Python client, Docker, Kubernetes
+- **Testing and automation:** pytest, GitHub Actions CI
 
 ## Explore the Project
 
