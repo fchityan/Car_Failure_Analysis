@@ -6,7 +6,7 @@ This guide preserves the detailed implementation, model workflow, evaluation, de
 
 A production-oriented predictive-maintenance classification project built from the original Car Failure exploratory analysis.
 
-The original notebook, `car_failure_analysis.ipynb`, is preserved as the analytical foundation. The repository now adds a reproducible training pipeline, validation-only threshold optimization, versioned model artifact, typed FastAPI scoring service, container deployment, schema validation, and unit tests.
+The original notebook, `data-discovery-and-insights/fleet-reliability-and-failure-risk-profiling.ipynb`, is preserved as the analytical foundation. The repository now adds a reproducible training pipeline, validation-only threshold optimization, versioned model artifact, typed FastAPI scoring service, container deployment, schema validation, and unit tests.
 
 ## Portfolio Snapshot
 
@@ -151,7 +151,7 @@ The notebook reported useful EDA signals including higher observed failure rates
 ```text
 .
 ├── app.py
-├── car_failure_analysis.ipynb
+├── data-discovery-and-insights/fleet-reliability-and-failure-risk-profiling.ipynb
 ├── Dockerfile
 ├── requirements.txt
 ├── src/

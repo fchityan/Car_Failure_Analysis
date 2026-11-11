@@ -57,7 +57,7 @@ See the [requirements and solution-design assessment](docs/business-analysis/bus
 
 - [Business analysis, solution design and AI-governance documentation](docs/README.md)
 
-- [Original exploratory notebook](car_failure_analysis.ipynb)
+- [Original exploratory notebook](data-discovery-and-insights/fleet-reliability-and-failure-risk-profiling.ipynb)
 - [Technical guide — schema, evaluation, and run commands](docs/solution-design/solution-design-and-implementation-guide.md)
 - [Deployment and operations notes](docs/operational-readiness/service-transition-and-operations-runbook.md)
 - [Security guidance](SECURITY.md)
