@@ -27,6 +27,24 @@ Vehicle information can contain missing values, inconsistent categories, and ext
 
 The exploratory notebook observed higher failure rates in very-high-usage vehicles and some high-fuel-consumption groups. **These are associations, not proof of causation.** No new predictive-performance score is claimed here because the original `Failure.csv` dataset is not committed and the updated training pipeline has not been rerun against it.
 
+## Business Analysis, Digital Transformation & AI Enablement
+
+- **Business analysis:** Define failure-risk requirements, source-field validation, maintenance triage and traceable acceptance criteria.
+- **Digital transformation:** Translate exploratory telemetry into a repeatable predictive-maintenance workflow and scoring API.
+- **AI enablement:** Assess leakage prevention, recall-weighted evaluation, source-data readiness and model-governance gaps.
+
+See the [requirements and solution-design assessment](docs/business-analysis/requirements-and-solution-design.md) and [AI readiness / governance assessment](docs/ai-enablement/readiness-and-governance.md). These documents are analysis artefacts, not claims of formal UAT or enterprise deployment.
+
+### Folder guide
+
+| Existing folder | Business or delivery perspective |
+|---|---|
+| `app.py` | API scoring and digital solution integration |
+| `src/` | Vehicle-data transformation and predictive ML lifecycle |
+| `tests/` | Automated model and schema quality checks |
+| `deploy/` | Deployment architecture and operating readiness |
+| `docs/` | Requirements analysis, solution design and AI governance |
+
 ## Technology Stack
 
 - **Language and analysis:** Python, pandas, NumPy, DuckDB, Jupyter Notebook
