@@ -1,4 +1,4 @@
-# Vehicle Failure Risk — Production ML
+# Vehicle Failure Risk
 
 A production-oriented predictive-maintenance classification project built from the original Car Failure exploratory analysis.
 
