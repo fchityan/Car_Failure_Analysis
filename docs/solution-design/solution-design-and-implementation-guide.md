@@ -1,6 +1,6 @@
-# Vehicle Failure Risk — Technical Guide
+# Solution Design & Implementation Guide — Vehicle Failure Risk
 
-This guide preserves the detailed implementation, model workflow, evaluation, deployment notes, and run commands previously included in the root README. Commands and file paths are relative to the repository root. For a concise summary, see the [project overview](../README.md).
+This guide preserves the detailed implementation, model workflow, evaluation, deployment notes, and run commands previously included in the root README. Commands and file paths are relative to the repository root. For a concise summary, see the [project overview](../../README.md).
 
 ---
 
@@ -167,4 +167,4 @@ The notebook reported useful EDA signals including higher observed failure rates
 
 The service now adds API-key authentication, SHA-256 model verification, structured request logging, request IDs, Prometheus metrics, environment-controlled documentation, a deployment manifest for immutable model promotion, CI container builds, Kubernetes probes/autoscaling/disruption controls, and production runbook/security guidance.
 
-See `docs/production_runbook.md`, `deploy/kubernetes.yaml`, `.env.example`, and `SECURITY.md`.
+See `docs/operational-readiness/service-transition-and-operations-runbook.md`, `deployment-architecture/kubernetes.yaml`, `.env.example`, and `SECURITY.md`.

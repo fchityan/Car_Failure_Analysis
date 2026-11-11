@@ -33,7 +33,7 @@ The exploratory notebook observed higher failure rates in very-high-usage vehicl
 - **Digital transformation:** Translate exploratory telemetry into a repeatable predictive-maintenance workflow and scoring API.
 - **AI enablement:** Assess leakage prevention, recall-weighted evaluation, source-data readiness and model-governance gaps.
 
-See the [requirements and solution-design assessment](docs/business-analysis/requirements-and-solution-design.md) and [AI readiness / governance assessment](docs/ai-enablement/readiness-and-governance.md). These documents are analysis artefacts, not claims of formal UAT or enterprise deployment.
+See the [requirements and solution-design assessment](docs/business-analysis/business-requirements-and-solution-design.md) and [AI readiness / governance assessment](docs/ai-enablement/ai-readiness-and-model-governance-assessment.md). These documents are analysis artefacts, not claims of formal UAT or enterprise deployment.
 
 ### Folder guide
 
@@ -42,7 +42,7 @@ See the [requirements and solution-design assessment](docs/business-analysis/req
 | `app.py` | API scoring and digital solution integration |
 | `src/` | Vehicle-data transformation and predictive ML lifecycle |
 | `tests/` | Automated model and schema quality checks |
-| `deploy/` | Deployment architecture and operating readiness |
+| `deployment-architecture/` | Deployment architecture and operating readiness |
 | `docs/` | Requirements analysis, solution design and AI governance |
 
 ## Technology Stack
@@ -55,9 +55,11 @@ See the [requirements and solution-design assessment](docs/business-analysis/req
 
 ## Explore the Project
 
+- [Business analysis, solution design and AI-governance documentation](docs/README.md)
+
 - [Original exploratory notebook](car_failure_analysis.ipynb)
-- [Technical guide — schema, evaluation, and run commands](docs/technical_guide.md)
-- [Deployment and operations notes](docs/production_runbook.md)
+- [Technical guide — schema, evaluation, and run commands](docs/solution-design/solution-design-and-implementation-guide.md)
+- [Deployment and operations notes](docs/operational-readiness/service-transition-and-operations-runbook.md)
 - [Security guidance](SECURITY.md)
 
 To reproduce training, provide the source `Failure.csv` and follow the technical guide.

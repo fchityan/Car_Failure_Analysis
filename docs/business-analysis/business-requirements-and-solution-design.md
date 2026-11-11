@@ -1,4 +1,4 @@
-# Business Requirements & Solution Design — Vehicle Failure Risk
+# Business Requirements & Solution Design Specification — Vehicle Failure Risk
 
 Project-facing **requirements and solution-design notes**, not a customer-approved BRD or UAT sign-off.
 
@@ -27,4 +27,4 @@ The acceptance checks above are **proposed business-analysis scenarios**, not co
 
 A real predictive-maintenance workflow needs sensor-data integration, maintenance-work-order ownership, failure labels, escalation thresholds, false-alarm analysis, SLA definition and an operator override process. The source `Failure.csv` is not committed; the newer pipeline has not been rerun on it here.
 
-See [AI readiness](../ai-enablement/readiness-and-governance.md).
+See [AI readiness](../ai-enablement/ai-readiness-and-model-governance-assessment.md).

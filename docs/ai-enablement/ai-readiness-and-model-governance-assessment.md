@@ -1,4 +1,4 @@
-# AI Enablement Readiness & Governance — Vehicle Failure Risk
+# AI Readiness & Model Governance Assessment — Vehicle Failure Risk
 
 ## Data and model readiness
 
@@ -19,4 +19,4 @@ The reference pipeline combines component-failure flags into a single target and
 
 **AI enablement status:** suitable for technical review and controlled pilot planning; **not independently validated for fleet production operations**.
 
-See [requirements and solution design](../business-analysis/requirements-and-solution-design.md).
+See [requirements and solution design](../business-analysis/business-requirements-and-solution-design.md).
