@@ -35,9 +35,9 @@ The exploratory notebook observed higher failure rates in very-high-usage vehicl
 - **Monitoring and deployment:** Prometheus Python client, Docker, Kubernetes
 - **Testing and automation:** pytest, GitHub Actions CI
 
-## Enterprise-Style Documentation (Reference; Not Approved for Production)
+## Project Documentation
 
-[Business requirements, architecture, assurance, security and operations pack](docs/enterprise/README.md). This is a portfolio reference and does not assert stakeholder sign-off, executed UAT, real-data validation or a live fleet deployment.
+[Predictive Maintenance](docs/enterprise/README.md). This is a portfolio reference and does not assert stakeholder sign-off, executed UAT, real-data validation or a live fleet deployment.
 
 ## Explore the Project
 
