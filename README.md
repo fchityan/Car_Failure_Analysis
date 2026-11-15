@@ -37,7 +37,7 @@ The exploratory notebook observed higher failure rates in very-high-usage vehicl
 
 ## Explore the Project
 
-- [Business analysis, solution design and AI-governance documentation](docs/README.md)
+- [Business analysis, AI solution design and operational readiness documentation](docs/README.md)
 
 - [Original exploratory notebook](data-discovery-and-insights/fleet-reliability-and-failure-risk-profiling.ipynb)
 - [Technical guide — schema, evaluation, and run commands](docs/solution-design/solution-design-and-implementation-guide.md)
