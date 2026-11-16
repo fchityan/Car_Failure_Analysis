@@ -10,4 +10,4 @@ This index brings together supporting documentation for a **proposed vehicle-fai
 | Service transition, monitoring & incident management | [Service Transition & Operational Support Runbook](operational-readiness/service-transition-and-operations-runbook.md) |
 | Reference deployment architecture | [Kubernetes Deployment Reference](../deployment-architecture/kubernetes.yaml) |
 
-The original source dataset (`Failure.csv`) is not included in the repository; no new verified locked-test performance result is claimed.
+The original source dataset (`$VEHICLE_DATA_PATH`) is not included in the repository; no new verified locked-test performance result is claimed.

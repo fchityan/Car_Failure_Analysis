@@ -70,13 +70,13 @@ Numerical values are median-imputed and standardized. Categorical fields are mos
 
 ## Train
 
-The source dataset is intentionally not committed. Place `Failure.csv` locally and run:
+The source dataset is intentionally not committed. Place `$VEHICLE_DATA_PATH` locally and run:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python -m src.train --data Failure.csv
+python -m src.train --data $VEHICLE_DATA_PATH
 ```
 
 Generated artifacts include:

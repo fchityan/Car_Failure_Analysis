@@ -5,7 +5,7 @@
 ## Test strategy and release gates
 | Gate | Acceptance evidence required | Current disposition |
 |---|---|---|
-| Source qualification | Data owner, sample population, provenance, label timing and data dictionary | Open; `Failure.csv` not committed |
+| Source qualification | Data owner, sample population, provenance, label timing and data dictionary | Open; `$VEHICLE_DATA_PATH` not committed |
 | Functional/data | Unit tests for labels, non-physical values, missing columns, feature exclusions | Code/tests documented; current execution unverified |
 | Model | Reproduce baseline and candidate comparison, validation F2 and untouched-test metrics | Open for verified source dataset |
 | Robustness/fairness | Time-based and subgroup testing; calibration; model drift limits | Proposed |

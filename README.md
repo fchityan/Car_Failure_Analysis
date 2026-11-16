@@ -25,7 +25,7 @@ Vehicle information can contain missing values, inconsistent categories, and ext
 
 ## Findings and Limitations
 
-The exploratory notebook observed higher failure rates in very-high-usage vehicles and some high-fuel-consumption groups. **These are associations, not proof of causation.** No new predictive-performance score is claimed here because the original `Failure.csv` dataset is not committed and the updated training pipeline has not been rerun against it.
+The exploratory notebook observed higher failure rates in very-high-usage vehicles and some high-fuel-consumption groups. **These are associations, not proof of causation.** No new predictive-performance score is claimed here because the original `$VEHICLE_DATA_PATH` dataset is not committed and the updated training pipeline has not been rerun against it.
 
 ## Technology Stack
 
@@ -48,4 +48,4 @@ The exploratory notebook observed higher failure rates in very-high-usage vehicl
 - [Deployment and operations notes](docs/operational-readiness/service-transition-and-operations-runbook.md)
 - [Security guidance](SECURITY.md)
 
-To reproduce training, provide the source `Failure.csv` and follow the technical guide.
+To reproduce training, provide the source `$VEHICLE_DATA_PATH` and follow the technical guide.

@@ -4,7 +4,7 @@
 
 The reference pipeline combines component-failure flags into a single target and excludes target/identifier fields from prediction inputs. It compares Logistic Regression, Random Forest and Gradient Boosting, using a recall-weighted F2 decision threshold selected on validation data.
 
-**Evidence boundary:** The source `Failure.csv` dataset is not in the repository. The enhanced training pipeline has not been rerun here against that dataset, so **no new predictive-performance metric is claimed**. Notebook associations with usage and fuel consumption are exploratory, not causal.
+**Evidence boundary:** The source `$VEHICLE_DATA_PATH` dataset is not in the repository. The enhanced training pipeline has not been rerun here against that dataset, so **no new predictive-performance metric is claimed**. Notebook associations with usage and fuel consumption are exploratory, not causal.
 
 ## Governance and validation matrix
 

@@ -25,6 +25,6 @@ The acceptance checks above are **proposed business-analysis scenarios**, not co
 
 ## Digital transformation considerations
 
-A real predictive-maintenance workflow needs sensor-data integration, maintenance-work-order ownership, failure labels, escalation thresholds, false-alarm analysis, SLA definition and an operator override process. The source `Failure.csv` is not committed; the newer pipeline has not been rerun on it here.
+A real predictive-maintenance workflow needs sensor-data integration, maintenance-work-order ownership, failure labels, escalation thresholds, false-alarm analysis, SLA definition and an operator override process. The source `$VEHICLE_DATA_PATH` is not committed; the newer pipeline has not been rerun on it here.
 
 See [AI readiness](../ai-enablement/ai-readiness-and-model-governance-assessment.md).

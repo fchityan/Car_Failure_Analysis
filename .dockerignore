@@ -4,6 +4,6 @@ __pycache__
 .venv
 .git
 .github
-Failure.csv
-failure.db
+*.csv
+*.db
 outputs

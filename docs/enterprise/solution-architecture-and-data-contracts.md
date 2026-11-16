@@ -4,7 +4,7 @@
 
 ## Logical system flow
 ```text
-Authorised vehicle data / Failure.csv (not committed)
+Authorised vehicle data / $VEHICLE_DATA_PATH (not committed)
   → schema checks & input normalization
   → derive Fail/Pass from Failure A–E
   → exclude IDs and target flags; impute/encode features
@@ -20,7 +20,7 @@ The source dataset and complete deployed end-to-end flow are not present as a ve
 ## Data contract decisions
 | Area | Reference requirement | Open evidence or decision |
 |---|---|---|
-| Source | `Failure.csv` supplied by an authorised owner | Dataset lineage, timestamp semantics, permitted use |
+| Source | `$VEHICLE_DATA_PATH` supplied by an authorised owner | Dataset lineage, timestamp semantics, permitted use |
 | Label | Boolean Fail/Pass based on any Failure A–E positive | Label observation time; what is knowable at prediction time |
 | Predictors | Vehicle operating attributes, excluding outcome flags and identifiers | Exact production schema, type/range catalogue and units |
 | Missing values | Pipeline preprocessing rather than silent row deletion | Acceptance ranges, quarantine thresholds and data quality SLA |

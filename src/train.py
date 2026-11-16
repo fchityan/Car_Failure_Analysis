@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -21,7 +22,7 @@ from .pipeline import (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Train a production-oriented vehicle failure classifier.")
-    parser.add_argument("--data", default="Failure.csv", help="Path to the source Failure.csv file.")
+    parser.add_argument("--data", default=os.environ.get("VEHICLE_DATA_PATH", "data/private_input"), help="Path to a private source dataset.")
     parser.add_argument("--artifacts-dir", default="artifacts", help="Directory for model artifacts.")
     parser.add_argument("--outputs-dir", default="outputs", help="Directory for evaluation outputs.")
     parser.add_argument("--random-state", type=int, default=42)

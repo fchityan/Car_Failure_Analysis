@@ -6,8 +6,8 @@ An exploratory analysis of vehicle condition, usage and component-failure indica
 
 ## Input and reproducibility
 
-- The notebook uses DuckDB and expects `Failure.csv` in its **working directory**. The source dataset is not committed.
-- It creates a local `failure.db` database from the supplied CSV. Do not commit the generated database or confidential fleet data.
+- The notebook uses DuckDB and reads its source from the `VEHICLE_DATA_PATH` environment variable. The source dataset is not committed.
+- It uses an in-memory DuckDB database populated from the private source. Do not commit the generated database or confidential fleet data.
 - The reproducible model-training API remains under `../src/`; consult the [Implementation Guide](../docs/solution-design/solution-design-and-implementation-guide.md) for the training and evaluation procedure.
 - Exploratory associations are not causal claims. No new predictive performance metrics are asserted without rerunning the updated pipeline against the source data.
 
