@@ -1,0 +1,59 @@
+name: Public repository data privacy guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  data-privacy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reject tracked raw data, generated model files, and saved notebook outputs
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+          import sys
+
+          blocked_ext = {
+              ".csv", ".tsv", ".psv", ".xlsx", ".xls", ".parquet", ".feather",
+              ".arrow", ".db", ".sqlite", ".sqlite3", ".joblib", ".pkl",
+              ".pickle", ".npy", ".npz", ".h5", ".hdf5", ".jsonl", ".ndjson",
+              ".zip", ".gz", ".bz2", ".zst", ".7z",
+          }
+          blocked_dirs = {
+              "data", "dataset", "datasets", "raw", "inputs", "private_data",
+              "local_data", "outputs", "artifacts", "mlruns", "mlruns_purchase_intent",
+              "mlflow-experiment-evidence",
+          }
+          blocked_exact = {".env", ".env.local"}
+          tracked = subprocess.check_output(["git", "ls-files", "-z"]).decode("utf-8").split("\0")
+          violations = 0
+          for name in filter(None, tracked):
+              path = pathlib.Path(name)
+              if (
+                  path.suffix.lower() in blocked_ext
+                  or any(part.lower() in blocked_dirs for part in path.parts[:-1])
+                  or path.name.lower() in blocked_exact
+              ):
+                  violations += 1
+              elif path.suffix.lower() == ".ipynb":
+                  try:
+                      notebook = json.loads(path.read_text(encoding="utf-8"))
+                      if any(
+                          (cell.get("outputs") or cell.get("execution_count") is not None)
+                          if cell.get("cell_type") == "code"
+                          else bool(cell.get("attachments"))
+                          for cell in notebook.get("cells", [])
+                      ):
+                          violations += 1
+                  except (OSError, ValueError):
+                      violations += 1
+
+          if violations:
+              print("Data privacy guard failed: tracked private-data formats, generated artifacts, or notebook outputs were found.")
+              sys.exit(1)
+          print("Data privacy guard passed.")
+          PY
